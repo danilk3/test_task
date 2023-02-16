@@ -1,8 +1,8 @@
 package com.example.test_task.service.quote;
 
-import com.example.test_task.model.QuoteVote;
 import com.example.test_task.dto.quote.QuoteRequestDto;
 import com.example.test_task.model.Quote;
+import com.example.test_task.model.QuoteVote;
 import com.example.test_task.model.User;
 import com.example.test_task.repository.QuoteRepository;
 import com.example.test_task.repository.QuoteVoteRepository;
@@ -40,7 +40,6 @@ public class QuoteServiceImpl implements QuoteService {
 
     @Override
     public Quote findById(Long id) {
-        // TODO: добавить проверку, если не найден
         Quote quote = quoteRepository.findById(id).orElse(null);
         return quote;
     }
@@ -48,7 +47,7 @@ public class QuoteServiceImpl implements QuoteService {
     @Override
     public Quote getRandomQuote() {
         Long size = quoteRepository.count();
-        return findById(new Random().nextLong(size));
+        return findById(new Random().nextLong(size + 1));
     }
 
     @Override
@@ -61,7 +60,6 @@ public class QuoteServiceImpl implements QuoteService {
         vote.setVoter(user);
         vote.setQuote(quote);
         vote.setCreatedAt(LocalDate.now());
-// TODO: добавить исключения
         quoteVoteRepository.save(vote);
 
         return quote;
@@ -77,7 +75,6 @@ public class QuoteServiceImpl implements QuoteService {
         vote.setVoter(user);
         vote.setQuote(quote);
         vote.setCreatedAt(LocalDate.now());
-// TODO: добавить исключения
         quoteVoteRepository.save(vote);
 
         return quote;
@@ -87,7 +84,6 @@ public class QuoteServiceImpl implements QuoteService {
     public Quote saveQuote(QuoteRequestDto request) {
         User creator = getCurrentUser();
 
-        // TODO: добавить исключения
         Quote quote = new Quote();
         quote.setContent(request.getContent());
         quote.setScore(0);
@@ -101,13 +97,17 @@ public class QuoteServiceImpl implements QuoteService {
 
     @Override
     public List<QuoteVote> getLast5Votes() {
-        // TODO: добавить проверку, если не найден
-        return quoteVoteRepository.findTop5ByOrderByCreatedAtDesc();
+        List<QuoteVote> quoteList = quoteVoteRepository.findTop5ByOrderByCreatedAtDesc();
+        return quoteList;
     }
 
     public User getCurrentUser() {
-        // TODO: добавить проверку, если не найден
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            return null;
+        }
+
         String email = authentication.getName();
         return userRepository.findByEmail(email);
     }

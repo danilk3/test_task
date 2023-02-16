@@ -24,8 +24,6 @@ public class JwtUser implements UserDetails {
         this.authorities = authorities;
     }
 
-    // TODO: добавить геттеры.
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();

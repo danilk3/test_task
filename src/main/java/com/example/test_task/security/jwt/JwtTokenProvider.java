@@ -33,7 +33,6 @@ public class JwtTokenProvider {
         jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
     }
 
-    // TODO: мб нужно переместить его в другое место
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -68,9 +67,8 @@ public class JwtTokenProvider {
 
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            // TODO: мое исключение
+            e.printStackTrace();
         }
-        // TODO: не норм
         return false;
     }
 

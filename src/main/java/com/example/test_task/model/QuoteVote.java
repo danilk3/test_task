@@ -1,7 +1,5 @@
 package com.example.test_task.model;
 
-import com.example.test_task.model.Quote;
-import com.example.test_task.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,11 +16,11 @@ public class QuoteVote {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User voter;
 
     @ManyToOne
-    @JoinColumn(name="quote_id")
+    @JoinColumn(name = "quote_id")
     private Quote quote;
 
     private LocalDate createdAt;

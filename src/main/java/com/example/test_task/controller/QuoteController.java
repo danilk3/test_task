@@ -1,21 +1,19 @@
 package com.example.test_task.controller;
 
 import com.example.test_task.dto.quote.QuoteRequestDto;
+import com.example.test_task.dto.quote.QuoteResponseDto;
+import com.example.test_task.model.Quote;
+import com.example.test_task.model.QuoteVote;
 import com.example.test_task.service.quote.QuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/quote/")
 public class QuoteController {
-    // .requestMatchers("/api/auth/**")
-    //                                .permitAll()
-    //                                .requestMatchers("/api/quote/**")
-    //                                .permitAll()
-    //                                .requestMatchers("/api/quote/user/**")
-    //                                .authenticated())
-
 
     private final QuoteService quoteService;
 
@@ -26,36 +24,64 @@ public class QuoteController {
 
     @PostMapping("user")
     public ResponseEntity saveQuote(@RequestBody QuoteRequestDto request) {
-        // TODO: эксепшн + dto
-        return ResponseEntity.ok(quoteService.saveQuote(request));
+        try {
+            quoteService.saveQuote(request);
+            return ResponseEntity.ok(QuoteResponseDto.builder().status("success").build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
     }
 
     @GetMapping("top10")
     public ResponseEntity getTop10Quotes() {
-        // TODO: эксепшн + dto
-        return ResponseEntity.ok(quoteService.getTop10Quotes());
+        try {
+            List<Quote> quoteList = quoteService.getTop10Quotes();
+            List<QuoteResponseDto> response = quoteList.stream().map(quote -> QuoteResponseDto.builder().content(quote.getContent()).score(quote.getScore()).creatorEmail(quote.getCreator().getEmail()).build()).toList();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
     }
 
     @GetMapping("random")
     public ResponseEntity getRandomQuote() {
-        // TODO: эксепшн + dto
-        return ResponseEntity.ok(quoteService.getRandomQuote());
+        try {
+            Quote randomQuote = quoteService.getRandomQuote();
+            QuoteResponseDto response = QuoteResponseDto.builder().content(randomQuote.getContent()).score(randomQuote.getScore()).creatorEmail(randomQuote.getCreator().getEmail()).build();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
     }
 
     @PutMapping("user/like")
-    public ResponseEntity likeQuote(@PathVariable("id") Long id) {
-        // TODO: эксепшн + dto + PathVariable?
-        return ResponseEntity.ok(quoteService.likeQuote(id));
+    public ResponseEntity likeQuote(@RequestParam("quote_id") Long id) {
+        try {
+            quoteService.likeQuote(id);
+            return ResponseEntity.ok(QuoteResponseDto.builder().status("success").build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
     }
 
     @PutMapping("user/dislike")
-    public ResponseEntity dislikeQuote(@PathVariable("id") Long id) {
-        // TODO: эксепшн + dto + PathVariable?
-        return ResponseEntity.ok(quoteService.dislikeQuote(id));
+    public ResponseEntity dislikeQuote(@RequestParam("quote_id") Long id) {
+        try {
+            quoteService.dislikeQuote(id);
+            return ResponseEntity.ok(QuoteResponseDto.builder().status("success").build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
     }
 
     @GetMapping("user/last_votes")
     public ResponseEntity getLast5Votes() {
-        return ResponseEntity.ok(quoteService.getLast5Votes());
+        try {
+            List<QuoteVote> quoteVotes = quoteService.getLast5Votes();
+            List<QuoteResponseDto> response = quoteVotes.stream().map(quote -> QuoteResponseDto.builder().content(quote.getQuote().getContent()).score(quote.getQuote().getScore()).build()).toList();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
     }
 }

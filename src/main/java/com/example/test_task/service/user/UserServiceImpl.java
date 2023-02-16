@@ -42,20 +42,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         User result = userRepository.findByEmail(email);
-        // TODO: добавить проверку, если не найден
         return result;
     }
 
     @Override
     public User findById(Long id) {
         User result = userRepository.findById(id).orElse(null);
-        // TODO: добавить проверку, если не найден
         return result;
     }
 
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
-        // TODO: добавить проверку, если не успешно
     }
 }

@@ -10,5 +10,4 @@ import java.util.List;
 public interface QuoteRepository extends JpaRepository<Quote, Long> {
 
     List<Quote> findTop10ByOrderByScoreDesc();
-
 }

@@ -7,7 +7,6 @@ import com.example.test_task.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
@@ -31,44 +30,34 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<AuthResponseDto> register(@RequestBody AuthRequestDto request) {
+    public ResponseEntity register(@RequestBody AuthRequestDto request) {
         try {
             userService.register(request);
 
             String email = request.getEmail();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, request.getPassword()));
 
-            // TODO: красивый эксепшн.
             String token = jwtTokenProvider.createToken(email);
             AuthResponseDto response = AuthResponseDto.builder().email(email).token(token).build();
 
             return ResponseEntity.ok(response);
-        } catch (AuthenticationException e) {
-            // TODO: переделать
-            throw new BadCredentialsException("Invalid request");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid request");
         }
     }
 
-    @GetMapping("all")
-    public ResponseEntity getAll() {
-        return ResponseEntity.ok(userService.getAll());
-    }
-
-
     @PostMapping("login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto request) {
+    public ResponseEntity login(@RequestBody AuthRequestDto request) {
         try {
             String email = request.getEmail();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, request.getPassword()));
 
-            // TODO: красивый эксепшн.
             String token = jwtTokenProvider.createToken(email);
             AuthResponseDto response = AuthResponseDto.builder().email(email).token(token).build();
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            // TODO: переделать
-            throw new BadCredentialsException("Invalid request");
+            return ResponseEntity.badRequest().body("Invalid request");
         }
     }
 }

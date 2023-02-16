@@ -22,9 +22,9 @@ public class User {
 
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy="creator",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Quote> createdQuotes;
 
-    @OneToMany(mappedBy="voter",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "voter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuoteVote> votes;
 }

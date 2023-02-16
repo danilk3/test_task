@@ -28,18 +28,23 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-				.httpBasic().disable()
+                .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-//                .authorizeHttpRequests(
-//                        (auth) -> auth
-//                                .requestMatchers("/api/auth/**")
-//                                .permitAll()
-//                                .requestMatchers("/api/quote/**")
-//                                .permitAll()
-//                                .requestMatchers("/api/quote/user/**")
-//                                .authenticated())
+                .and()
+                .authorizeHttpRequests(
+                        (auth) -> auth
+                                .requestMatchers(
+                                        "/api/auth/**",
+                                        "/api/quote/top10",
+                                        "/api/quote/random")
+                                .permitAll()
+                                .requestMatchers(
+                                        "/api/quote/user",
+                                        "/api/quote/user/like",
+                                        "/api/quote/user/dislike",
+                                        "/api/quote/user/last_votes")
+                                .authenticated())
                 .apply(new JwtConfigurer(jwtTokenProvider));
         return http.build();
     }
