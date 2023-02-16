@@ -1,0 +1,114 @@
+package com.example.test_task.service.quote;
+
+import com.example.test_task.model.QuoteVote;
+import com.example.test_task.dto.quote.QuoteRequestDto;
+import com.example.test_task.model.Quote;
+import com.example.test_task.model.User;
+import com.example.test_task.repository.QuoteRepository;
+import com.example.test_task.repository.QuoteVoteRepository;
+import com.example.test_task.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
+
+@Service
+@Slf4j
+public class QuoteServiceImpl implements QuoteService {
+
+    private final QuoteRepository quoteRepository;
+    private final UserRepository userRepository;
+
+    private final QuoteVoteRepository quoteVoteRepository;
+
+    @Autowired
+    public QuoteServiceImpl(QuoteRepository quoteRepository, UserRepository userRepository, QuoteVoteRepository quoteVoteRepository) {
+        this.quoteRepository = quoteRepository;
+        this.userRepository = userRepository;
+        this.quoteVoteRepository = quoteVoteRepository;
+    }
+
+    @Override
+    public List<Quote> getTop10Quotes() {
+        return quoteRepository.findTop10ByOrderByScoreDesc();
+    }
+
+    @Override
+    public Quote findById(Long id) {
+        // TODO: добавить проверку, если не найден
+        Quote quote = quoteRepository.findById(id).orElse(null);
+        return quote;
+    }
+
+    @Override
+    public Quote getRandomQuote() {
+        Long size = quoteRepository.count();
+        return findById(new Random().nextLong(size));
+    }
+
+    @Override
+    public Quote likeQuote(Long id) {
+        User user = getCurrentUser();
+        Quote quote = findById(id);
+        quote.setScore(quote.getScore() + 1);
+
+        QuoteVote vote = new QuoteVote();
+        vote.setVoter(user);
+        vote.setQuote(quote);
+        vote.setCreatedAt(LocalDate.now());
+// TODO: добавить исключения
+        quoteVoteRepository.save(vote);
+
+        return quote;
+    }
+
+    @Override
+    public Quote dislikeQuote(Long id) {
+        User user = getCurrentUser();
+        Quote quote = findById(id);
+        quote.setScore(quote.getScore() - 1);
+
+        QuoteVote vote = new QuoteVote();
+        vote.setVoter(user);
+        vote.setQuote(quote);
+        vote.setCreatedAt(LocalDate.now());
+// TODO: добавить исключения
+        quoteVoteRepository.save(vote);
+
+        return quote;
+    }
+
+    @Override
+    public Quote saveQuote(QuoteRequestDto request) {
+        User creator = getCurrentUser();
+
+        // TODO: добавить исключения
+        Quote quote = new Quote();
+        quote.setContent(request.getContent());
+        quote.setScore(0);
+        quote.setCreatedAt(LocalDate.now());
+        quote.setCreator(creator);
+
+        quoteRepository.save(quote);
+
+        return quote;
+    }
+
+    @Override
+    public List<QuoteVote> getLast5Votes() {
+        // TODO: добавить проверку, если не найден
+        return quoteVoteRepository.findTop5ByOrderByCreatedAtDesc();
+    }
+
+    public User getCurrentUser() {
+        // TODO: добавить проверку, если не найден
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userRepository.findByEmail(email);
+    }
+}
