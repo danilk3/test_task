@@ -1,0 +1,15 @@
+/Users/bblex/Desktop/focus/test_dot_net/test_task/bin/Debug/net7.0/test_task
+/Users/bblex/Desktop/focus/test_dot_net/test_task/bin/Debug/net7.0/test_task.deps.json
+/Users/bblex/Desktop/focus/test_dot_net/test_task/bin/Debug/net7.0/test_task.runtimeconfig.json
+/Users/bblex/Desktop/focus/test_dot_net/test_task/bin/Debug/net7.0/test_task.dll
+/Users/bblex/Desktop/focus/test_dot_net/test_task/bin/Debug/net7.0/test_task.pdb
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.csproj.AssemblyReference.cache
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.GeneratedMSBuildEditorConfig.editorconfig
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.AssemblyInfoInputs.cache
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.AssemblyInfo.cs
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.csproj.CoreCompileInputs.cache
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.dll
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/refint/test_task.dll
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.pdb
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/test_task.genruntimeconfig.cache
+/Users/bblex/Desktop/focus/test_dot_net/test_task/obj/Debug/net7.0/ref/test_task.dll
